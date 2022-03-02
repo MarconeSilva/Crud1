@@ -1,12 +1,17 @@
 package com.marcone.crud1.entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Usuarios implements Serializable{
@@ -19,6 +24,10 @@ public class Usuarios implements Serializable{
 	private String email;
 	private String telefone;
 	private String senha;
+	
+	@OneToMany(mappedBy = "cliente")
+	@JsonIgnore
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	public Usuarios() {
 		
@@ -72,6 +81,10 @@ public class Usuarios implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
 
 	@Override
 	public int hashCode() {
@@ -89,6 +102,7 @@ public class Usuarios implements Serializable{
 		Usuarios other = (Usuarios) obj;
 		return Objects.equals(id, other.id);
 	}
+	
 	
 	
 }
