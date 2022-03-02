@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.marcone.crud1.entidade.Categoria;
 import com.marcone.crud1.entidade.ItemDePedido;
+import com.marcone.crud1.entidade.Pagamento;
 import com.marcone.crud1.entidade.Pedido;
 import com.marcone.crud1.entidade.Produto;
 import com.marcone.crud1.entidade.Usuarios;
@@ -43,7 +44,7 @@ public class Teste implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		
 		Usuarios u1 = new Usuarios(null, "marcone", "marcone@gmail.com", "988849634", "12345");
-		Usuarios u2 = new Usuarios(null, "nayma	", "nayma@gmail.com", "988849634", "12345");
+		Usuarios u2 = new Usuarios(null, "nayma", "nayma@gmail.com", "988849634", "12345");
 		
 		repositorioDeUsuario.saveAll(Arrays.asList(u1, u2));
 		
@@ -74,14 +75,18 @@ public class Teste implements CommandLineRunner{
 		
 		repositorioDeProduto.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
-		ItemDePedido ip1 = new ItemDePedido(ped1, p1, 2, p1.getPrice());
-		ItemDePedido ip2 = new ItemDePedido(ped1, p3, 1, p3.getPrice());
-		ItemDePedido ip3 = new ItemDePedido(ped2, p3, 2, p3.getPrice());
-		ItemDePedido ip4 = new ItemDePedido(ped3, p5, 2, p5.getPrice());
+		ItemDePedido ip1 = new ItemDePedido(ped1, p1, 2, p1.getpreco());
+		ItemDePedido ip2 = new ItemDePedido(ped1, p3, 1, p3.getpreco());
+		ItemDePedido ip3 = new ItemDePedido(ped2, p3, 2, p3.getpreco());
+		ItemDePedido ip4 = new ItemDePedido(ped3, p5, 2, p5.getpreco());
 		
 		
 		repositorioDeItemDePedido.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));
 		
+		Pagamento pag1 = new Pagamento(null, Instant.parse("2022-02-26T21:11:07Z"), ped1);
+		ped1.setPagamento(pag1);
+		
+		repositorioDePedido.save(ped1);
 	}
 	
 

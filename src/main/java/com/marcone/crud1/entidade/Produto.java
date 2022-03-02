@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Produto implements Serializable {
@@ -20,9 +23,9 @@ public class Produto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	private String nome;
 	private String descricao;
-	private Double price;
+	private Double preco;
 	private String imgUrl;
 	
 	@ManyToMany
@@ -30,15 +33,18 @@ public class Produto implements Serializable {
 	inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private Set<Categoria> categorias = new HashSet<>();
 	
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemDePedido> itens = new HashSet<>();
+	
 	public Produto() {		
 	}
 
-	public Produto(Long id,String name, String descricao, Double price, String imgUrl) {
+	public Produto(Long id,String nome, String descricao, Double preco, String imgUrl) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.nome = nome;
 		this.descricao = descricao;
-		this.price = price;
+		this.preco = preco;
 		this.imgUrl = imgUrl;
 	}
 
@@ -50,12 +56,12 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getnome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setnome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getDescricao() {
@@ -66,12 +72,12 @@ public class Produto implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Double getPrice() {
-		return price;
+	public Double getpreco() {
+		return preco;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setpreco(Double preco) {
+		this.preco = preco;
 	}
 
 	public String getImgUrl() {
@@ -84,6 +90,15 @@ public class Produto implements Serializable {
 
 	public Set<Categoria> getCategorias() {
 		return categorias;
+	}
+	
+	@JsonIgnore
+	public Set<Pedido> getPedidos(){
+		Set<Pedido> set = new HashSet<>();
+		for (ItemDePedido x : itens) {
+			set.add(x.getPedido());
+		}
+		return set;
 	}
 
 	@Override

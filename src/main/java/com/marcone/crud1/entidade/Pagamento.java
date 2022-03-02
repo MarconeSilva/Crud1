@@ -1,39 +1,41 @@
 package com.marcone.crud1.entidade;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.time.Instant;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Categoria implements Serializable {
+public class Pagamento implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
+	private Instant momento;
 	
+	@OneToOne
+	@MapsId
 	@JsonIgnore
-	@ManyToMany(mappedBy = "categorias")
-	private Set<Produto> produtos = new HashSet<>();
+	private Pedido pedido;
 	
-	public Categoria() {
+	public Pagamento() {
 		
 	}
 
-	public Categoria(Long id, String nome) {
+	public Pagamento(Long id, Instant momento, Pedido pedido) {
 		super();
 		this.id = id;
-		this.nome = nome;
+		this.momento = momento;
+		this.pedido = pedido;
 	}
 
 	public Long getId() {
@@ -44,16 +46,20 @@ public class Categoria implements Serializable {
 		this.id = id;
 	}
 
-	public String getnome() {
-		return nome;
+	public Instant getmomento() {
+		return momento;
 	}
 
-	public void setnome(String nome) {
-		this.nome = nome;
-	}	
+	public void setmomento(Instant momento) {
+		this.momento = momento;
+	}
 
-	public Set<Produto> getProdutos() {
-		return produtos;
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 	@Override
@@ -69,7 +75,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Pagamento other = (Pagamento) obj;
 		return Objects.equals(id, other.id);
 	}
 	
